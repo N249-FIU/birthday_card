@@ -228,7 +228,29 @@
                 right: 10px;
             }
         }
-    </style>
+    /* ... your other CSS styles ... */
+
+     @media (max-width: 600px) {
+        .container { 
+            width: 90%; 
+            padding: 15px; 
+        }
+        h1 { 
+            font-size: 2.2rem; 
+        }
+        .subtitle { 
+            font-size: 1rem; 
+        }
+        .next-button { 
+            padding: 12px 24px; 
+            font-size: 1.1rem; 
+        }
+        .audio-controls { 
+            bottom: 15px; 
+            right: 15px; 
+        }
+    }
+</style>
 </head>
 <body>
     <div class="container">
@@ -263,19 +285,16 @@
         // Set initial volume
         audio.volume = volumeControl.value;
 
-        // Play audio when page loads
-        window.addEventListener('load', () => {
-            setTimeout(() => {
-                audio.play()
-                    .then(() => {
-                        isPlaying = true;
-                        playPauseBtn.innerHTML = '<i class="play-icon">⏸️</i>';
-                    })
-                    .catch(error => {
-                        console.log("Audio play failed due to autoplay restrictions:", error);
-                    });
-            }, 1000);
-        });
+        // Start audio on first tap/click anywhere on screen (bypasses phone blocks)
+document.body.addEventListener('click', function startAudioOnInteraction() {
+    if (!isPlaying) {
+        audio.play().then(() => {
+            isPlaying = true;
+            playPauseBtn.innerHTML = '<i class="play-icon">⏸️</i>';
+        }).catch(err => console.log(err));
+    }
+    document.body.removeEventListener('click', startAudioOnInteraction);
+}, { once: true });
 
         // Play/Pause button
         playPauseBtn.addEventListener('click', () => {
