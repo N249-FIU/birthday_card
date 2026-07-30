@@ -533,6 +533,10 @@
     data-new-gr-c-s-check-loaded="14.1235.0"
     data-gr-ext-installed=""
   >
+      <audio id="birthday-song" loop>
+        <source src="birthday.mp3" type="audio/mp3">
+        Your browser does not support the audio element.
+    </audio>
     <!-- Balloons and Confetti will be added by JavaScript -->
 
     <!-- Birthday Cake -->
@@ -891,6 +895,22 @@
 
         window.location.href = "letter.html";
       }
+      
+    const audio = document.getElementById('birthday-song');
+
+    // Automatically try to play when cake.html loads
+    window.addEventListener('load', () => {
+        audio.play().catch(error => {
+            console.log("Autoplay blocked, waiting for interaction...");
+        });
+    });
+
+    // Backup: play audio on first tap/click anywhere if blocked
+    document.body.addEventListener('click', function startAudio() {
+        audio.play().catch(err => console.log(err));
+        document.body.removeEventListener('click', startAudio);
+    }, { once: true });
+</script>
     </script>
 
     </body>
